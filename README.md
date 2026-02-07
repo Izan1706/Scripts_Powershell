@@ -1,6 +1,2 @@
-# MDUAL_Powershell
-Curso PowerShell 25-26
-
-En aquest curs farem proves amb scripting fent ús de PowerShell
-
-feat Izan Rodriguez
+# Scripts Powershell
+En este repositorio ire colgando algunos scripts que con el tiempo use o desarrolle.
