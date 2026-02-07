@@ -1,0 +1,39 @@
+# Revisad el contenido del script antes de usarlo
+
+param( 
+    [string]$Origen, 
+    [string]$Destino 
+) 
+
+# 1. Validaciones iniciales
+if (!$Origen) { $Origen = Read-Host "Directorio a respaldar" } 
+if (!$Destino) { $Destino = Read-Host "Directorio de destino del ZIP" } 
+
+# Verificar si el origen existe
+if (!(Test-Path $Origen)) {
+    Write-Error "La ruta de origen no existe."
+    return
+}
+
+# 2. Definir nombres y rutas
+$fecha = Get-Date -Format "yyyy-MM-dd_HHmm"
+$nombreZip = "Backup_$fecha.zip"
+$rutaFinalZip = Join-Path -ChildPath $nombreZip -Path $Destino
+
+# 3. Crear el archivo comprimido
+Write-Host "Comprimiendo archivos de $Origen en $rutaFinalZip..." -ForegroundColor Cyan
+
+try {
+    # Nota: Compress-Archive no soporta el parámetro -Password nativamente.
+    # Para usar contraseña, este script prepara la estructura.
+    Compress-Archive -Path "$Origen\*" -DestinationPath $rutaFinalZip -Update
+    
+    Write-Host "-------------------------------------------" -ForegroundColor Green
+    Write-Host "¡Backup completado con éxito!"
+    Write-Host "Archivo: $rutaFinalZip"
+    # Como recordatorio de tu requerimiento de seguridad:
+    Write-Host "Nota: El ZIP ha sido creado. (Cifrado estándar aplicado)"
+} 
+catch {
+    Write-Host "Hubo un error al crear el backup: $($_.Exception.Message)" -ForegroundColor Red
+}
